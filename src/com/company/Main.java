@@ -11,28 +11,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    //создание переменной PATH, в которой хранится путь к файлу
     public static final String PATH = "E:\\Дгту\\Современные технологии программирования\\";
 
     public static void main(String[] args) throws IOException {
         //Build reader instance
         FileWriter writer = new FileWriter(PATH + "log.txt", true);
+        //
         try {
+            //Чтение файлов
             ArrayList<Teacher> teachers = readFile(PATH + "Teacher.csv", Teacher.class, writer);
             ArrayList<Student> students = readFile(PATH + "Student.csv", Student.class, writer);
+            //сериализация учителей и студентов
             serialize(teachers, PATH + "saveteachers.txt", writer);
             serialize(students, PATH + "savestudents.txt", writer);
+            //десириализацияучителей и студентов
             ArrayList<Teacher> deserializeTeacher = deserialize(PATH + "saveteachers.txt", writer);
             ArrayList<Student> deserializeStudent = deserialize(PATH + "savestudents.txt", writer);
-
+            //
             Teacher teacher = new Teacher(new String[]{"Сухов", "39", "1980", "Современные технологии программирования", "12"});
             teacher.serialize(PATH + "uniqueTeacher.txt");
+            //
             Teacher uniqueTeacher = new Teacher();
             uniqueTeacher.deserialize(PATH + "uniqueTeacher.txt");
 
         } catch (Throwable e) {
+            //
             writer.write("\n" + e.getClass().toString() + ": " + e.getMessage());
             e.printStackTrace();
         } finally {
+            //
             writer.close();
         }
     }
@@ -41,16 +49,19 @@ public class Main {
     public static <T extends Person> ArrayList<T> readFile(String path, Class<T> tClass, FileWriter writer)
             throws Throwable {
         ArrayList<T> persons = new ArrayList<>();
+        //
         try {
+            //Запись содержимого в файл
             writer.write("Start read file: " + path + "\n");
-
+            //
             CSVReader reader = null;
+            //Установка кодировки
             reader = new CSVReader(new InputStreamReader(new FileInputStream(path), Charset.forName("windows-1251")));
-            //Read all rows at once
+            //считываем все строки
             List<String[]> allRows = reader.readAll();
-            //Read CSV line by line and use the string array as you want
+            //
             Constructor<T> constructor = tClass.getConstructor(String[].class);
-
+            //
             for (String[] row : allRows) {
                 T t = constructor.newInstance((Object) row);
                 persons.add(t);
@@ -62,8 +73,8 @@ public class Main {
             writer.write("Catch exception when read file " + path);
             throw e instanceof InvocationTargetException ? e.getCause() : e;
         }
+        //
         writer.write("Success read file: " + path + "\n");
-
         return persons;
     }
 
@@ -72,9 +83,12 @@ public class Main {
         FileOutputStream outputStream = null;
         writer.write(obj + " start seriallize to path: " + path + "\n");
         try {
+            //создание 2-ух потоков и сохраняем их в файл
             outputStream = new FileOutputStream(path);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            //сохранение
             objectOutputStream.writeObject(obj);
+            //Закрытие потока и освобождение ресурсов
             objectOutputStream.close();
             writer.write(" Seriallized success; \n");
 
