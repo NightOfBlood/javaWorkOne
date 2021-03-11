@@ -49,7 +49,7 @@ public class Student extends Person implements Specializable{
 
     // Дисериализация (Загрузка полей)
     @Override
-    public Object deserialize(String path) {
+    public Object deserialize(String path) throws Throwable {
         Object deserialize = super.deserialize(path);
         if (deserialize == null || !(deserialize instanceof Student))
             return null;
@@ -63,5 +63,11 @@ public class Student extends Person implements Specializable{
     @Override
     public String getSpecialization() {
         return favoriteSubject;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "This person is a teacher with a " +group +" years of experience in " + course + "//rjvv"
+                +favoriteSubject + "dsd";
     }
 }

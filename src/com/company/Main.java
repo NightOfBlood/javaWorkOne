@@ -11,15 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    //создание переменной PATH, в которой хранится путь к файлу
     public static final String PATH = "E:\\Дгту\\Современные технологии программирования\\";
 
     public static void main(String[] args) throws IOException {
-        //Build reader instance
+        //Build writer instance//Записываются только логи
         FileWriter writer = new FileWriter(PATH + "log.txt", true);
-        //
+        //блок, для обработки всех исключений
         try {
-            //Чтение файлов
+            //Считывание данных из файла
             ArrayList<Teacher> teachers = readFile(PATH + "Teacher.csv", Teacher.class, writer);
             ArrayList<Student> students = readFile(PATH + "Student.csv", Student.class, writer);
             //сериализация учителей и студентов
@@ -28,10 +27,11 @@ public class Main {
             //десириализацияучителей и студентов
             ArrayList<Teacher> deserializeTeacher = deserialize(PATH + "saveteachers.txt", writer);
             ArrayList<Student> deserializeStudent = deserialize(PATH + "savestudents.txt", writer);
-            //
-            Teacher teacher = new Teacher(new String[]{"Сухов", "39", "1980", "Современные технологии программирования", "12"});
+            //создание объекта реализующего интерфейса(ISerializable)
+            ISerializable teacher = new Teacher(new String[]{"Сухов", "39", "1980", "Современные технологии программирования", "12"});
+
             teacher.serialize(PATH + "uniqueTeacher.txt");
-            //
+
             Teacher uniqueTeacher = new Teacher();
             uniqueTeacher.deserialize(PATH + "uniqueTeacher.txt");
 
@@ -45,11 +45,10 @@ public class Main {
         }
     }
 
-    // TODO:Работа с дженерикс
+    //дженерикс
     public static <T extends Person> ArrayList<T> readFile(String path, Class<T> tClass, FileWriter writer)
             throws Throwable {
         ArrayList<T> persons = new ArrayList<>();
-        //
         try {
             //Запись содержимого в файл
             writer.write("Start read file: " + path + "\n");
@@ -99,7 +98,6 @@ public class Main {
         }
     }
 
-    //TODO: написать логи
     //Дессириализация
     public static <T> T deserialize(String path, FileWriter writer) throws IOException, ClassNotFoundException {
         FileInputStream fileInputStream = null;

@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 
 // класс, содержащий общие поля для классов Student и Teacher
 public class Person implements Serializable, ISerializable {
@@ -51,40 +52,31 @@ public class Person implements Serializable, ISerializable {
 
     @Override
     //Сериализация
-    public void serialize(String path) {
-        FileOutputStream outputStream = null;
-        try {
-            //создание 2-ух потоков и сохраняем их в файл
-            outputStream = new FileOutputStream(path);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+    public void serialize(String path) throws Throwable {
+        // Создание стрима для сериализации модели в файл
+        // Патерн декоратор
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(path))){
             //сохранение
             objectOutputStream.writeObject(this);
-            //Закрытие потока и освобождение ресурсов
-            objectOutputStream.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e instanceof InvocationTargetException ? e.getCause() : e;
         }
     }
 
     @Override
     //Десериализация
-    public Object deserialize(String path) {
-        FileInputStream fileInputStream = null;
+    public Object deserialize(String path) throws Throwable {
         //Загрузка сохраненных полей
-        try {
-            fileInputStream = new FileInputStream(path);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(path))){
             Person person = (Person) objectInputStream.readObject();
             this.lastname = person.lastname;
             this.age = person.age;
             this.dateofbirth = person.dateofbirth;
             return person;
-
         }
         catch (Exception e) {
-            e.printStackTrace();
+            throw e instanceof InvocationTargetException ? e.getCause() : e;
         }
-        return null;
     }
 
     //TODO: сделать для потомков

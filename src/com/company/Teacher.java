@@ -39,7 +39,8 @@ public class Teacher extends Person implements Specializable {
 
     @Override
     //Загрузка сохраненных полей
-    public Object deserialize(String path) {
+    public Object deserialize(String path) throws Throwable {
+        // Вызов метода родительского класса
         Object deserialize = super.deserialize(path);
         if (deserialize == null || !(deserialize instanceof Teacher))
             return null;
