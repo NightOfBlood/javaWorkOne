@@ -6,16 +6,13 @@ public class Student extends Person implements Specializable{
     protected String group;
     protected String course;
     protected String favoriteSubject;
-    //вызов конструктора Student
+
     public Student() {
         super();
     }
 
-    //обработка ошибочных данных
     public Student(String[] info) {
-        // считывание из person
         super(info);
-        //Проверка
         if (info.length <= 5) {
             throw new IllegalArgumentException("Not enough parameters for student");
         } else {
@@ -24,30 +21,25 @@ public class Student extends Person implements Specializable{
             favoriteSubject=info[5];
         }
     }
-    //Возвращение значения заданного поля
     public String getGroup() {
         return group;
     }
-    //Передача аргумента в качестве строки и присвоение значения поля
     public void setGroup(String group) {
         this.group = group;
     }
-    //Возвращение значения заданного поля
+
     public String getCourse() { return course; }
-    //Передача аргумента в качестве строки и присвоение значения поля
     public void setCourse(String course) {
         this.course = course;
     }
-    //Возвращение значения заданного поля
+
     public String favoriteSubject() {
         return favoriteSubject;
     }
-    //Передача аргумента в качестве строки и присвоение значения поля
     public void favoriteSubject(String favoriteSubject) {
         this.favoriteSubject = favoriteSubject;
     }
 
-    // Дисериализация (Загрузка полей)
     @Override
     public Object deserialize(String path) throws Throwable {
         Object deserialize = super.deserialize(path);
@@ -67,7 +59,7 @@ public class Student extends Person implements Specializable{
 
     @Override
     public String toString() {
-        return super.toString() + "This person is a teacher with a " +group +" years of experience in " + course + "//rjvv"
-                +favoriteSubject + "dsd";
+        return super.toString() + "This person is a student with a " +group +" name of group " + course + "course"
+                +favoriteSubject + "and favorite subject";
     }
 }
